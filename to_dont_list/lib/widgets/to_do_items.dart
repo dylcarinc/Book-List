@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:to_dont_list/objects/book.dart';
+import 'package:to_dont_list/widgets/edit_book_dialog.dart';
 
 typedef ToDoListChangedCallback = Function(Book item, bool completed);
 typedef ToDoListRemovedCallback = Function(Book item);
 
-
 class BookItem extends StatefulWidget {
   BookItem(
-  {required this.item,
+      {required this.item,
       required this.completed,
       required this.onListChanged,
       required this.onDeleteItem})
@@ -35,6 +35,17 @@ class _BookItemState extends State<BookItem> {
         : Theme.of(context).primaryColor;
   }
 
+  // Changes the values of the book to the new ones input by user
+  // Similar to the method in main that triggers todo dialog
+  void _handleChangedValues(String newName, TextEditingController controller,
+      double newProgress, bool isFiction) {
+    setState(() {
+      widget.item.name = newName;
+      widget.item.progress = newProgress;
+      widget.item.isFiction = isFiction;
+    });
+  }
+
   TextStyle? _getTextStyle(BuildContext context) {
     if (!widget.completed) return null;
 
@@ -51,20 +62,37 @@ class _BookItemState extends State<BookItem> {
         setState(() {
           widget.item.increaseProgress();
         });
-        
       },
       onLongPress: widget.completed
           ? () {
               setState(() {
-          widget.onDeleteItem(widget.item);
-        });
+                widget.onDeleteItem(widget.item);
+              });
             }
           : null,
-      leading: CircularProgressIndicator(
-        value: widget.item.progress,
-        backgroundColor: Colors.black54,
-        color: widget.item.isFiction == true ? Colors.red : Colors.green
-        //child: Text(item.abbrev()),
+      // Added Icon next to progress indicator
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircularProgressIndicator(
+              value: widget.item.progress,
+              backgroundColor: Colors.black54,
+              color: widget.item.isFiction == true ? Colors.red : Colors.green
+              //child: Text(item.abbrev()),
+              ),
+          // When the icon is pressed it will open the edit book dialog
+          IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return EditBookDialog(
+                          onEditConfirmed: _handleChangedValues);
+                    });
+              },
+              color: widget.item.isFiction == true ? Colors.red : Colors.green),
+        ],
       ),
       title: Text(
         widget.item.name,
@@ -72,4 +100,4 @@ class _BookItemState extends State<BookItem> {
       ),
     );
   }
-  }
+}

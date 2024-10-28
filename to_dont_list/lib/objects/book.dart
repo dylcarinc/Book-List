@@ -1,12 +1,14 @@
 class Book {
-   Book({required this.name, required this.isFiction,  this.progress = 0 });
-  final String name;
+  Book({required this.name, required this.isFiction, this.progress = 0});
+  //changed name and isFiction to no longer be final, so they can be edited
+  String name;
   double progress;
-  final bool isFiction;
-  void changeProgress( double newProgress){
+  bool isFiction;
+  void changeProgress(double newProgress) {
     progress = newProgress;
   }
-  void increaseProgress(){
+
+  void increaseProgress() {
     progress = progress + .02;
   }
 }
