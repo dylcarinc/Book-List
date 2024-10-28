@@ -4,10 +4,9 @@ import 'package:to_dont_list/objects/book.dart';
 typedef ToDoListChangedCallback = Function(Book item, bool completed);
 typedef ToDoListRemovedCallback = Function(Book item);
 
-
 class BookItem extends StatefulWidget {
   BookItem(
-  {required this.item,
+      {required this.item,
       required this.completed,
       required this.onListChanged,
       required this.onDeleteItem})
@@ -51,20 +50,31 @@ class _BookItemState extends State<BookItem> {
         setState(() {
           widget.item.increaseProgress();
         });
-        
       },
       onLongPress: widget.completed
           ? () {
               setState(() {
-          widget.onDeleteItem(widget.item);
-        });
+                widget.onDeleteItem(widget.item);
+              });
             }
           : null,
-      leading: CircularProgressIndicator(
-        value: widget.item.progress,
-        backgroundColor: Colors.black54,
-        color: widget.item.isFiction == true ? Colors.red : Colors.green
-        //child: Text(item.abbrev()),
+      // Added Icon next to progress button
+      // Now when the icon is pressed it will open the edit book dialog
+      leading: Row(
+        children: [
+          CircularProgressIndicator(
+              value: widget.item.progress,
+              backgroundColor: Colors.black54,
+              color: widget.item.isFiction == true ? Colors.red : Colors.green
+              //child: Text(item.abbrev()),
+              ),
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              // Open edit book dialog here when tapped
+            },
+          ),
+        ],
       ),
       title: Text(
         widget.item.name,
@@ -72,4 +82,4 @@ class _BookItemState extends State<BookItem> {
       ),
     );
   }
-  }
+}
