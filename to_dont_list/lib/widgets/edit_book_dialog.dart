@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 typedef BookEditedCallback = Function(String value,
     TextEditingController textConroller, double sliderValue, bool switchValue);
 
+// This is the new dialog box that pops up for editing
+// It's triggered by the new edit button beside each book entry
 class EditBookDialog extends StatefulWidget {
   const EditBookDialog({
     super.key,
@@ -40,7 +42,7 @@ class _EditBookDialogState extends State<EditBookDialog> {
               });
             },
             controller: _inputController,
-            decoration: const InputDecoration(hintText: "enter new name"),
+            decoration: const InputDecoration(hintText: "Enter new name:"),
           ),
           Slider(
             min: 0,
@@ -59,6 +61,9 @@ class _EditBookDialogState extends State<EditBookDialog> {
                   switchValue = value;
                 });
               },
+              // Changes the switch colors to match fiction/nonfiction choices
+              activeColor: Colors.green,
+              inactiveThumbColor: Colors.red,
               title: RichText(
                 text: const TextSpan(
                   children: <TextSpan>[
